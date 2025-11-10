@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: Dummy API
+  version: v1.0
+  description: A simple dummy API for demonstration and testing purposes.
+
+servers:
+  - url: https://dummy-api.example.com/v1
+    description: Dummy API server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: List of users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid input
+
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the user
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a user by ID
+      operationId: getUserById
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      summary: Update a user by ID
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+        '404':
+          description: User not found
+    delete:
+      summary: Delete a user by ID
+      operationId: deleteUser
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+
+  /status:
+    get:
+      summary: Get API health status
+      operationId: getStatus
+      responses:
+        '200':
+          description: API is up and running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+                  uptime:
+                    type: string
+                    example: "48 hours"
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        age:
+          type: integer
+          example: 30
+        active:
+          type: boolean
+          example: true
