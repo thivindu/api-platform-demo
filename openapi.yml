@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  title: Travel Management System API
+  description: API for managing travel bookings, itineraries, and user profiles.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@travelmanagement.com
+    url: https://travelmanagement.com/support
+servers:
+  - url: https://api.travelmanagement.com/v1
+    description: Production server
+  - url: https://sandbox.travelmanagement.com/v1
+    description: Sandbox server
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: Retrieve a list of all registered users.
+      operationId: getUsers
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              examples:
+                example1:
+                  value:
+                    - id: 1
+                      name: John Doe
+                      email: john.doe@example.com
+                    - id: 2
+                      name: Jane Smith
+                      email: jane.smith@example.com
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new user
+      description: Register a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+            examples:
+              example1:
+                value:
+                  name: Alice Johnson
+                  email: alice.johnson@example.com
+      responses:
+        '200':
+          description: ''
+          x-name: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '500':
+          description: ''
+          x-name: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+  /trips:
+    get:
+      summary: Get all trips
+      description: Retrieve a list of all trips.
+      responses:
+        '200':
+          description: A list of trips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'
+              examples:
+                example1:
+                  value:
+                    - id: 101
+                      destination: Paris
+                      startDate: '2023-12-01'
+                      endDate: '2023-12-10'
+                    - id: 102
+                      destination: Tokyo
+                      startDate: '2024-01-15'
+                      endDate: '2024-01-25'
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new trip
+      description: Add a new trip to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripInput'
+            examples:
+              example1:
+                value:
+                  destination: Rome
+                  startDate: '2024-03-01'
+                  endDate: '2024-03-10'
+      responses:
+        '201':
+          description: Trip created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+        '400':
+          description: Bad request
+  /trips/{tripId}:
+    get:
+      summary: Get trip details
+      description: Retrieve details of a specific trip.
+      parameters:
+        - name: tripId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the trip to retrieve
+      responses:
+        '200':
+          description: Trip details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+        '404':
+          description: Trip not found
+    delete:
+      summary: Delete a trip
+      description: Remove a trip from the system.
+      parameters:
+        - name: tripId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the trip to delete
+      responses:
+        '204':
+          description: Trip deleted successfully
+        '404':
+          description: Trip not found
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticate a user and return a token for session management.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+            examples:
+              example1:
+                value:
+                  email: john.doe@example.com
+                  password: password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+              examples:
+                example1:
+                  value:
+                    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        '401':
+          description: Invalid credentials
+  /auth/logout:
+    post:
+      summary: User logout
+      description: Log out the currently authenticated user.
+      responses:
+        '204':
+          description: Logout successful
+  /sample:
+    get:
+      summary: ''
+      description: Retrieve a sample object for demonstration purposes.
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the user
+        name:
+          type: string
+          description: Full name of the user
+        email:
+          type: string
+          description: Email address of the user
+    UserInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          description: Full name of the user
+        email:
+          type: string
+          description: Email address of the user
+    Trip:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the trip
+        destination:
+          type: string
+          description: Destination of the trip
+        startDate:
+          type: string
+          format: date
+          description: Start date of the trip
+        endDate:
+          type: string
+          format: date
+          description: End date of the trip
+    TripInput:
+      type: object
+      required:
+        - destination
+        - startDate
+        - endDate
+      properties:
+        destination:
+          type: string
+          description: Destination of the trip
+        startDate:
+          type: string
+          format: date
+          description: Start date of the trip
+        endDate:
+          type: string
+          format: date
+          description: End date of the trip
+    LoginInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: Email address of the user
+        password:
+          type: string
+          description: Password of the user
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Authentication token for session management
