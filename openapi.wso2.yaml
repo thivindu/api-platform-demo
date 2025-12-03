@@ -1,11 +1,11 @@
 version: api-platform.wso2.com/v1
 kind: http/rest
-data:
+spec:
   name: Travel Management System API
   version: 1.0.0
   context: /travel-management-system-api-test
   description: API for managing travel bookings, itineraries, and user profiles.
-  upstream:
+  upstreams:
     - url: https://api.travelmanagement.com/v1
   operations:
     - method: GET
