@@ -1,10 +1,10 @@
 version: api-platform.wso2.com/v1
 kind: http/rest
-data:
+spec:
   name: Library API
   version: 1.0.0
   context: /library-api
-  upstream:
+  upstreams:
     - url: https://api.library.com
   operations:
     - method: GET

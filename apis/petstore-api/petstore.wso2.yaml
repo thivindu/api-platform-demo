@@ -1,10 +1,10 @@
 version: api-platform.wso2.com/v1
 kind: http/rest
-data:
+spec:
   name: PetStore API
   version: v1.0
   context: /petstore
-  upstream:
+  upstreams:
     - url: http://petstore.swagger.io/v2
   operations:
     - method: GET
