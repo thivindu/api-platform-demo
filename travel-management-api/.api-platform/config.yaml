@@ -1,14 +1,10 @@
 version: '1.0'
 apis:
-  - openapi: test.yaml
-    wso2Artifact: test.wso2.yaml
-    documentation: ''
-    tests: ''
+  - openapi: openapi.yml
+    wso2Artifact: openapi.api-platform.yaml
+    docsFolder: docs
+    testsFolder: tests
 spectralRulesets:
-  - name: WSO2 REST API AI Readiness Guidelines
-    sourceFolder: https://github.com/Thenujan-Nagaratnam/api-platform/tree/main/api-designer/spectral-rulesets
-    fileName: ai-readiness.yaml
-    rulesetContentPath: rulesetContent
   - name: OWASP Top 10
     sourceFolder: https://github.com/Thenujan-Nagaratnam/api-platform/tree/main/api-designer/spectral-rulesets
     fileName: owasp_top_10.yaml
